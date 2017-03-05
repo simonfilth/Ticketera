@@ -31,13 +31,7 @@
 					{!! Form::text('descripcion_entrada[]'.$key, null, ['class' => 'form-control']) !!}
 				</div>
 			</div>
-		@endforeach    
-<!-- {{ Form::checkbox('tags[]', 1) }}
-{{ Form::label('Book') }}
-{{ Form::checkbox('tags[]', 2) }}
-{{ Form::label('Php') }}
-{{ Form::checkbox('tags[]', 3) }}
-{{ Form::label('Laravel') }} -->
+		@endforeach   
 			    
 		</div>	    
 		       

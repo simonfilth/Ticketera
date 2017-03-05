@@ -9,10 +9,20 @@
                 <div class="panel-heading">
                     <h1 class="panel-title">Agregar Evento</h1>
                 </div>                                 
-                <div class="panel-body">               
+                <div class="panel-body"> 
+                    <div class="text-danger" >
+                        @if(Session::has('message'))
+                        <div class="alert alert-danger" role="alert">
+                            <p>Por favor corrija los errores: </p>
+                            <ul>                        
+                                <li>{{Session::get('message')}}</li>
+                            </ul>
+                        </div>      
+                        @endif
+                    </div>              
                     @include('errors.errors')
 
-                    {!! Form::open(['route' =>'organizador.store', 'method' => 'POST']) !!}
+                    {!! Form::open(['route' =>'organizador.store', 'method' => 'POST', 'name'=>'formulario']) !!}
 
                         @include('organizador.formulario')
                         <br>

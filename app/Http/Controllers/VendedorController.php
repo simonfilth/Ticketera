@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\CreateVendedorRequest;
 use Carbon\Carbon;
 use Auth;
 use App\Venta;
@@ -22,16 +23,15 @@ class VendedorController extends Controller
         $ventas=Venta::join('evento_tipo_entradas as et','et.id','ventas.evento_id')
             ->join('eventos','eventos.id','et.evento_id')
             ->join('users','users.id','ventas.usuario_id')
-            ->select('et.*', 'users.name','eventos.fecha','eventos.nombre_evento','eventos.hora', 'ventas.codigo', 'ventas.email')
+            ->select('et.*', 'users.name','eventos.fecha','eventos.nombre_evento','eventos.hora', 'ventas.codigo', 'ventas.email','ventas.status')
             ->get();
     	foreach ($ventas as $i => $venta) {
     		$datos = $venta->fecha;
 	        list($año, $dia, $mes) = explode("-", $datos); 
 	        $venta->fecha="$dia/$mes/$año";
     	}
-        $validar=Validar::all();
-        // dd($validar);
-        return \View::make('vendedor.index',compact('ventas','validar'));   
+
+        return \View::make('vendedor.index',compact('ventas'));   
     }
 
     public function create()
@@ -72,7 +72,7 @@ class VendedorController extends Controller
         return \View::make('vendedor.create',compact('eventos','codigo','evento_tipo_entradas'));
     }
 
-    public function store(Request $request)
+    public function store(CreateVendedorRequest $request)
     {   
         $datos = EventoTipoEntrada::find($request->evento_id);
 
@@ -81,10 +81,11 @@ class VendedorController extends Controller
         $venta->usuario_id = Auth::user()->id;
         $venta->evento_id = $datos->id;
         $venta->email = $request->email;
+        $venta->status = 0;
         $venta->created_at = Carbon::now()->format('Y-m-d H:i:s');
         $venta->updated_at = Carbon::now()->format('Y-m-d H:i:s');
         $venta->save();
-        	
+        	// dd($datos->evento_id);
     	$evento=Evento::find($datos->evento_id);
     	if($evento->cupo_id==1){
         	$evento->cantidad -= 1;	
@@ -100,17 +101,12 @@ class VendedorController extends Controller
 		$nombre_evento=$evento->nombre_evento;
 		$hora=$evento->hora;
 		$email_subject = "Contacto del vendedor";
-		$email_body = "Has recibido un Email de notificación de venta.\n\nAquí tenemos los detalles:\n\nNombre del evento: $nombre_evento\n\nFecha: $fecha\n\nHora: $hora\n\nCodigo: $codigo\n";
+		$email_body = "Has recibido un Email de notificacion de venta.\n\nAqui tenemos los detalles:\n\nNombre del evento: $nombre_evento\n\nFecha: $fecha\n\nHora: $hora\n\nCodigo: $codigo\n";
 		$headers = "From: noreply@ticketera.com\n"; 
 		$headers .= "Reply-To: Email";	
 	
 		mail($to,$email_subject,$email_body,$headers);
 		 
-		 // \Mail::send('vendedor.correo', ['email' => $to], function ($m) use ($to) {
-   //          $m->from('hello@app.com', 'Your Application');
-
-   //          $m->to($to, "asistente")->subject('Your Reminder!');
-   //      });
 
         return redirect('vendedor/index')
         ->with("message","Venta realizada correctamente, Se ha enviado un email al asistente");

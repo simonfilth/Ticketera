@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\CreateOrganizadorRequest;
 use Carbon\Carbon;
 use Auth;
 use App\Evento;
@@ -32,9 +33,30 @@ class OrganizadorController extends Controller
         return \View::make('organizador.create');
     }
 
-    public function store(Request $request)
+    public function store(CreateOrganizadorRequest $request)
     {   
-    	// dd($request->entrada[0]);
+        if($request->cupos==1 && $request->cantidad==null){
+            return redirect()->action('OrganizadorController@create')
+                ->with('message', 'El campo cantidad es requerido si el cupo es limitado')
+                ->withInput();
+        }
+        if(count($request->entrada)==0){
+            return redirect()->action('OrganizadorController@create')
+            ->with('message', 'Por favor seleccione mínimo un tipo de entrada')
+            ->withInput();
+        }
+        else{
+            for ($i=0; $i < count($request->entrada); $i++) { 
+                if(($request->entrada[$i]==1 && ($request->precio_entrada[0]==null||$request->descripcion_entrada[0]==null))
+                    ||($request->entrada[$i]==2 && ($request->precio_entrada[1]==null||$request->descripcion_entrada[1]==null))
+                    ||($request->entrada[$i]==3 && ($request->precio_entrada[2]==null||$request->descripcion_entrada[2]==null))){
+                    return redirect()->action('OrganizadorController@create')
+                    ->with('message', 'Por favor debe rellenar los campos correspondientes al tipo de entrada seleccionada ')
+                    ->withInput();
+                }
+            }
+        }
+
         $input  = $request->fecha;
         $format = 'd/m/Y';
         $date = Carbon::createFromFormat($format, $input);

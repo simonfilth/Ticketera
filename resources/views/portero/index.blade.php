@@ -37,10 +37,7 @@
                         <th>Validar</th>
                     </thead>
                     <tbody>
-                    @if($ventas_validar==null)
-                        <td colspan="5" align="center">No hay ventas que mostrar</td>
-                    @else
-                        @foreach($ventas_validar as $venta)
+                        @forelse($ventas_validar as $venta)
                                 <tr>                  
                                     <td>{!!$venta->codigo!!}</td>
                                     <td>{!!$venta->email!!}</td>
@@ -50,6 +47,7 @@
                                     <td>{!!$venta->descripcion_entrada!!}</td>
                                     <td>{!!$venta->fecha!!}</td>
                                     <td>{!!$venta->hora!!}</td>
+                                    @if($venta->status==0)
                                     <td>
                                         <form id="logout-form" action="{{route('portero.store')}}" method="POST" >
                                             {{ csrf_field() }}
@@ -57,10 +55,13 @@
                                             <input type="submit" value="Canjear" class="btn btn-primary btn-xs arriba">
                                         </form>                               
                                     </td>
+                                    @else
+                                        <td>Canjeado</td>
+                                    @endif
                                 </tr>
-
-                        @endforeach
-                    @endif
+                        @empty
+                            <td colspan="5" align="center">No hay ventas que mostrar</td>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

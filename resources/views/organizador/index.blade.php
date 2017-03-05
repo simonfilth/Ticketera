@@ -31,10 +31,7 @@
                         <th>Disponibles</th>
                     </thead>
                     <tbody>
-                    @if($eventos==null)
-                        <td colspan="5" align="center">No hay eventos que mostrar</td>
-                    @else
-                        @foreach($eventos as $evento)
+                        @forelse($eventos as $evento)
                                 <tr>
                                     <td>{!!$evento->id!!}</td>
                                     <td>{!!$evento->nombre_evento!!}</td>
@@ -48,9 +45,9 @@
                                         <td>--</td>
                                     @endif
                                 </tr>
-
-                        @endforeach
-                    @endif
+                        @empty
+                            <td colspan="6" align="center">No hay eventos que mostrar</td>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -58,4 +55,5 @@
     </div>
 </div>
 <div class="col-sm-2"></div>
+
 @endsection

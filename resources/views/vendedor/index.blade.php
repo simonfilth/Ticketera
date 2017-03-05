@@ -37,12 +37,8 @@
                         <th>Status</th>
                     </thead>
                     <tbody>
-                    @if($ventas==null)
-                        <td colspan="5" align="center">No hay ventas que mostrar</td>
-                    @else
-                        @foreach($ventas as $venta)
+                        @forelse($ventas as $venta)
                                 <tr>
-                                    <?php $check=0; ?>
                                     <td>{!!$venta->codigo!!}</td>
                                     <td>{!!$venta->email!!}</td>
                                     <td>{!!$venta->name!!}</td>
@@ -51,19 +47,15 @@
                                     <td>{!!$venta->descripcion_entrada!!}</td>
                                     <td>{!!$venta->fecha!!}</td>
                                     <td>{!!$venta->hora!!}</td>
-                                    @foreach($validar as $canjear)
-                                        @if($canjear->evento_id==$venta->id)
-                                            <td>Canjeado</td>
-                                            <?php $check=1; ?>
-                                        @endif
-                                    @endforeach
-                                    @if($check==0)
+                                    @if($venta->status==1)
+                                        <td>Canjeado</td>
+                                    @else
                                         <td>No canjeado</td>
                                     @endif
                                 </tr>
-
-                        @endforeach
-                    @endif
+                        @empty
+                            <td colspan="9" align="center">No hay ventas que mostrar</td>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

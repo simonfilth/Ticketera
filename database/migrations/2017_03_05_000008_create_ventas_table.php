@@ -18,6 +18,7 @@ class CreateVentasTable extends Migration
             $table->increments('id');
             $table->string('codigo');
             $table->unsignedInteger('usuario_id');
+            $table->tinyInteger('status');
             $table->unsignedInteger('evento_id');
             $table->string('email');
             $table->timestamps();

@@ -17,8 +17,7 @@
 </div>
 <div class="form-group">
     {!! Form::label('cantidad', 'Cantidad de Personas:') !!}
-    {!! Form::text('cantidad', null, ['class' => 'form-control', 'id'=>'cant'
-    ]) !!}
+    {!! Form::text('cantidad', null, ['class' => 'form-control', 'id'=>'cant']) !!}
 </div>
 
 <label for="hora_inicio">Hora de Inicio</label>
