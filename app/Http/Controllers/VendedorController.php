@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Auth;
 use App\Venta;
 use App\Evento;
+use App\Validar;
 use App\EventoTipoEntrada;
 
 class VendedorController extends Controller
@@ -18,11 +19,19 @@ class VendedorController extends Controller
     
     public function index(Request $request)
     {        
-    	$ventas=Venta::join('evento_tipo_entradas as et','et.id','ventas.evento_id')
-    		->join('eventos','eventos.id','et.evento_id')
-    		->join('users','users.id','ventas.usuario_id')
-    		->get();
-        return \View::make('vendedor.index',compact('ventas'));   
+        $ventas=Venta::join('evento_tipo_entradas as et','et.id','ventas.evento_id')
+            ->join('eventos','eventos.id','et.evento_id')
+            ->join('users','users.id','ventas.usuario_id')
+            ->select('et.*', 'users.name','eventos.fecha','eventos.nombre_evento','eventos.hora', 'ventas.codigo', 'ventas.email')
+            ->get();
+    	foreach ($ventas as $i => $venta) {
+    		$datos = $venta->fecha;
+	        list($año, $dia, $mes) = explode("-", $datos); 
+	        $venta->fecha="$dia/$mes/$año";
+    	}
+        $validar=Validar::all();
+        // dd($validar);
+        return \View::make('vendedor.index',compact('ventas','validar'));   
     }
 
     public function create()

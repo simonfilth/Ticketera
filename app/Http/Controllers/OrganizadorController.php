@@ -19,7 +19,11 @@ class OrganizadorController extends Controller
     public function index(Request $request)
     {        
     	$eventos=Evento::all();
-        // dd($eventos);
+        foreach ($eventos as $i => $evento) {
+            $datos = $evento->fecha;
+            list($año, $dia, $mes) = explode("-", $datos); 
+            $evento->fecha="$dia/$mes/$año";
+        }
         return \View::make('organizador.index',compact('eventos'));   
     }
 

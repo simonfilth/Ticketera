@@ -27,7 +27,7 @@ class CreateValidarTable extends Migration
                 ->onUpdate('restrict');
 
             $table->foreign('evento_id', 'validar_eventoid_foreign_idx')
-                ->references('id')->on('eventos')
+                ->references('id')->on('evento_tipo_entradas')
                 ->onDelete('restrict')
                 ->onUpdate('restrict');
         });

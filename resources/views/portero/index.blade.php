@@ -34,15 +34,14 @@
                         <th>Descripción</th>
                         <th>Fecha</th>
                         <th>Hora</th>
-                        <th>Status</th>
+                        <th>Validar</th>
                     </thead>
                     <tbody>
-                    @if($ventas==null)
+                    @if($ventas_validar==null)
                         <td colspan="5" align="center">No hay ventas que mostrar</td>
                     @else
-                        @foreach($ventas as $venta)
-                                <tr>
-                                    <?php $check=0; ?>
+                        @foreach($ventas_validar as $venta)
+                                <tr>                  
                                     <td>{!!$venta->codigo!!}</td>
                                     <td>{!!$venta->email!!}</td>
                                     <td>{!!$venta->name!!}</td>
@@ -51,15 +50,13 @@
                                     <td>{!!$venta->descripcion_entrada!!}</td>
                                     <td>{!!$venta->fecha!!}</td>
                                     <td>{!!$venta->hora!!}</td>
-                                    @foreach($validar as $canjear)
-                                        @if($canjear->evento_id==$venta->id)
-                                            <td>Canjeado</td>
-                                            <?php $check=1; ?>
-                                        @endif
-                                    @endforeach
-                                    @if($check==0)
-                                        <td>No canjeado</td>
-                                    @endif
+                                    <td>
+                                        <form id="logout-form" action="{{route('portero.store')}}" method="POST" >
+                                            {{ csrf_field() }}
+                                            <input type="text" name="venta" style="display: none;" value="{{$venta->id}}">
+                                            <input type="submit" value="Canjear" class="btn btn-primary btn-xs arriba">
+                                        </form>                               
+                                    </td>
                                 </tr>
 
                         @endforeach
