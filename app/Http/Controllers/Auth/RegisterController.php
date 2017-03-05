@@ -65,7 +65,10 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'tipo_usuario' => $data['tipo_usuario'],
             'password' => bcrypt($data['password']),
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),   
         ]);
     }
 }

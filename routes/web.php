@@ -11,6 +11,20 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Auth::routes();
+
+Route::get('/', 'HomeController@index');
+Route::get('/home', 'HomeController@index');
+
+Route::get('organizador/index', 'OrganizadorController@index');
+Route::resource('organizador', 'OrganizadorController');
+
+Route::get('vendedor/index', 'VendedorController@index');
+Route::resource('vendedor', 'VendedorController');
+
+Route::get('portero/index', 'PorteroController@index');
+Route::resource('portero', 'PorteroController');
